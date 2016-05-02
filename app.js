@@ -19,17 +19,25 @@ app.get('/', function (req, res) {
 
 app.get('/process', function(req, res) {
   console.log('get process', req.query.url);
+  var sent_flag = false;
   
-  if(req.query.url) {
-    var child = spawn('phantomjs', [
-      'phantom-script.js',
-      req.query.url
-    ]);
+  if(req.query.url) {  
+    try {
+      var child = spawn('phantomjs', [
+        'phantom-script.js',
+        req.query.url
+      ]);
 
-    child.stdout.on('data', function(chunk) {
-      res.send(chunk.toString('ascii').split('/')[1]);
-      console.log('time', new Date(), 'chunk', chunk.toString('ascii'));
-    });
+      child.stdout.on('data', function(chunk) {
+        if(!sent_flag){
+          res.send(chunk.toString('ascii').split('/')[1]);  
+          sent_flag = true;
+        }
+        console.log('time', new Date(), 'chunk', chunk.toString('ascii'));
+      });  
+    } catch (ex) {
+     console.log( 'error generation image', ex ); 
+    }
   } else {
     res.send('process NO URL');  
   }
