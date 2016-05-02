@@ -1,25 +1,20 @@
 var app = angular.module('imageGenerator',[]);
 
-app.controller('generatorController',['$scope', 'imageGenerationService' , 'popupService', function( $scope, igs, ps ) {
+app.controller('generatorController',['$scope', 'imageGenerationService' , 'popupService', 'localStorageService', function( $scope, igs, ps, ls ) {
   var ctrl = this;
-  ctrl.images = [
-    {src: 'http://isma.xyz/fc/image_1462184462000.png', thumbnail: 'http://isma.xyz/fc/image_1462184462000.png_thumbnail.png'},
-    {src: 'http://isma.xyz/fc/image_1462184618000.png', thumbnail: 'http://isma.xyz/fc/image_1462184618000.png_thumbnail.png'},
-    {src: 'http://isma.xyz/fc/image_1462192361000.png', thumbnail: 'http://isma.xyz/fc/image_1462192361000.png_thumbnail.png'},
-    {src: 'http://isma.xyz/fc/image_1462192287000.png', thumbnail: 'http://isma.xyz/fc/image_1462192287000.png_thumbnail.png'}
-  ];
-  
+  ctrl.images = ls.getAll();
   
   ctrl.process = function(){
     if(ctrl.url.indexOf('http://') >= 0 || ctrl.url.indexOf('https://') >= 0 ){
         igs.getImage( ctrl.url ).then(function(result){
           ctrl.loadedUrl = result.data;  
-          
-          ctrl.images.push({
+          var imgObj = {
             src: 'http://isma.xyz/fc/'+ctrl.loadedUrl.split('_thumbnail')[0],
             thumbnail: 'http://isma.xyz/fc/'+ctrl.loadedUrl,
             text: ctrl.url
-          });
+          };
+          ctrl.images.push(imgObj);
+          ls.add(ctrl.url,imgObj);
         }, function errorCB(error){
           console.log('error', error);
         });      
@@ -102,3 +97,33 @@ app.service('popupService', [function() {
     setController: service.setController
   };
 }]);
+
+
+app.service('localStorageService', [function() {
+  var service = {};
+  
+  service.add = function(key, object){
+    localStorage[key] = JSON.stringify(object);
+  }
+  
+  service.get = function(key) {
+    return JSON.parse(localStorage[key]);
+  };
+  
+  service.getAll = function(){
+    var keys = Object.keys(localStorage);
+    var arr = [];
+    
+    for(var i = 0; i < keys.length; i++){
+      arr.push( service.get(keys[i]) );
+    }
+    return arr;
+  }
+  
+  return {
+    add: service.add, 
+    get: service.get,
+    getAll: service.getAll
+  }
+}]);
+
