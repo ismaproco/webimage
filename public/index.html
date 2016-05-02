@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta charset="UTF-8">
+      <title>Web Images</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+      <div id="main">
+
+        <div ng-app="imageGenerator">
+
+          <div ng-controller="generatorController as ctrl" class="main">
+            <div class="search-container">
+              <input type="text" ng-model="ctrl.url" class="url-input">
+              <button ng-click="ctrl.process()" class=" btn process">Process</button>  
+            </div>
+            {{ctrl.loadedUrl}}
+
+            <div class="Grid" >
+              <div class="Grid-cell" ng-repeat="image in ctrl.images">
+                <a ng-click="ctrl.openImage(image)">
+                  <img ng-src="{{image.thumbnail}}" class="thumbnail"  />
+                </a>
+                <span>{{image.text}}</span>
+              </div>
+            </div>  
+
+          </div>
+
+
+
+          <div class="popup {{ctrl.status}}" ng-controller="popupController as ctrl" ng-click="ctrl.toggle()">
+
+            This is a popup;
+
+            <div class="popup-container">
+
+              <div ng-if="ctrl.image">
+
+                <img ng-src="{{ctrl.image.src}}" class="popup-img">
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        
+        </div>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js"></script>
+      <script src="bundle.js"></script>
+  </body>
+</html>
