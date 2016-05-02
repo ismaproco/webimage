@@ -29,11 +29,15 @@ app.get('/process', function(req, res) {
       ]);
 
       child.stdout.on('data', function(chunk) {
-        if(!sent_flag){
-          res.send(chunk.toString('ascii').split('/')[1]);  
-          sent_flag = true;
-        }
+        var imageName = chunk.toString('ascii').split('/')[1]; 
         console.log('time', new Date(), 'chunk', chunk.toString('ascii'));
+        if(!sent_flag){
+          if(imageName && imageName.indexOf('.png') > 0) {
+            res.send(imageName);
+            sent_flag = true;
+          }
+        }
+        
       });  
     } catch (ex) {
      console.log( 'error generation image', ex ); 
