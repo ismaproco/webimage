@@ -230,7 +230,7 @@ a {
   background: rgba(255, 255, 255, 0.8);
 }
 .popup.hide {
-  display: none;
+  display: none;  
 }
 .popup.show {
   display: block;
@@ -246,4 +246,18 @@ a {
   width: 100%;
 }
 
+/* override grid cell */
+.Grid-cell {
+  margin: 3px 0;
+}
+
+.Grid-cell span {
+  width: 200px;
+  overflow: hidden;
+  display: block;
+  text-overflow: ellipsis;
+  text-align: center;
+  color: #A6A5A5;
+  margin: 2px auto;
+}
 
