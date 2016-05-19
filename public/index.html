@@ -5,6 +5,8 @@
       <meta charset="UTF-8">
       <title>Web Images</title>
     <link href="style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
   </head>
 
   <body>
@@ -13,16 +15,20 @@
           <div ng-controller="generatorController as ctrl" class="main">
             <div class="search-container">
               <input type="text" ng-model="ctrl.url" class="url-input">
-              <button ng-click="ctrl.process()" class=" btn process">Process</button>  
+              <a ng-click="ctrl.process()" class="btn process" tabindex="0" ng-keypress="($event.which === 13)?ctrl.process():0">Process</a>  
             </div>
             <div class="Grid" >
               <div class="Grid-cell" ng-repeat="image in ctrl.images">
                 <a ng-click="ctrl.openImage(image)">
                   <img ng-src="{{image.thumbnail}}" class="thumbnail"  />
                   <span>{{image.text}}</span>
-                </a> 
+                </a>
+                <span ng-click="ctrl.removeItemFromList(image, $index)">Delete</span>
               </div>
-            </div>  
+            </div>
+            <div class="page-spinner {{ctrl.processStatus == 'loading' ? 'visible': 'hidden'}}">
+                <i class="fa fa-spinner fa-pulse"></i>
+            </div>
           </div>
           <div class="popup {{ctrl.status}}" ng-controller="popupController as ctrl" ng-click="ctrl.toggle()">
             <div class="popup-container">
@@ -33,6 +39,7 @@
           </div>
         </div>  
       </div>
+      
       <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js"></script>
       <script src="bundle.js"></script>
   </body>

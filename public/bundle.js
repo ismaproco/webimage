@@ -3,22 +3,40 @@ var app = angular.module('imageGenerator',[]);
 app.controller('generatorController',['$scope', 'imageGenerationService' , 'popupService', 'localStorageService', function( $scope, igs, ps, ls ) {
   var ctrl = this;
   ctrl.images = ls.getAll();
+  ctrl.processStatus = 'none';
   
   ctrl.process = function(){
-    if(ctrl.url.indexOf('http://') >= 0 || ctrl.url.indexOf('https://') >= 0 ){
-        igs.getImage( ctrl.url ).then(function(result){
-          ctrl.loadedUrl = result.data;  
-          var imgObj = {
-            src: 'http://isma.xyz/fc/'+ctrl.loadedUrl.split('_thumbnail')[0],
-            thumbnail: 'http://isma.xyz/fc/'+ctrl.loadedUrl,
-            text: ctrl.url
-          };
-          ctrl.images.push(imgObj);
-          ls.add(ctrl.url,imgObj);
-        }, function errorCB(error){
-          console.log('error', error);
-        });      
+    ctrl.processStatus = 'loading';
+    
+    if( ctrl.url.length > 0 ){
+    
+      if(!( ctrl.url.indexOf('http://') >= 0 || ctrl.url.indexOf('https://') >= 0) ){
+         ctrl.url = 'http://' + ctrl.url;
+      }
+      
+      var _url = ctrl.url;
+      igs.getImage( ctrl.url ).then(function(result){
+        ctrl.loadedUrl = result.data;  
+        var imgObj = {
+          src: 'http://isma.xyz/fc/'+ctrl.loadedUrl.split('_thumbnail')[0],
+          thumbnail: 'http://isma.xyz/fc/'+ctrl.loadedUrl,
+          text: _url
+        };
+        ctrl.images.push(imgObj);
+        ls.add(_url,imgObj);
+        ctrl.processStatus = 'finished';
+      }, function errorCB(error){
+        console.log('error', error);
+        ctrl.processStatus = 'error';
+      });      
     }
+  };
+  
+  
+  ctrl.removeItemFromList = function(image, index) {
+    ctrl.images.splice(index, 1);
+    ls.remove(image.text);
+    console.log('image:',image,'index:' ,index);
   }
   
   ctrl.openImage = function(image) {
@@ -120,10 +138,15 @@ app.service('localStorageService', [function() {
     return arr;
   }
   
+  service.remove = function(key){
+    localStorage.removeItem(key);
+  }
+  
   return {
     add: service.add, 
     get: service.get,
-    getAll: service.getAll
+    getAll: service.getAll,
+    remove: service.remove
   }
 }]);
 
