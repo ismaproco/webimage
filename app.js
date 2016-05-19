@@ -29,8 +29,8 @@ app.get('/process', function(req, res) {
       ]);
 
       child.stdout.on('data', function(chunk) {
-        var imageName = chunk.toString('ascii').split('/')[1]; 
-        console.log('time', new Date(), 'chunk', chunk.toString('ascii'));
+        var imageName = chunk.toString('ascii').split('/')[1]+'/'+chunk.toString('ascii').split('/')[2]; 
+        console.log('time', new Date(), 'chunk', chunk.toString('ascii'), 'imageName', imageName);
         if(!sent_flag){
           if(imageName && imageName.indexOf('.png') > 0) {
             res.send(imageName);

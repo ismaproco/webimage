@@ -18,7 +18,7 @@ if( !system.args[1] ) {
 url = system.args[1];
 
 page.open( url , function() {
-  var imageName = 'public/image_'+Date.parse(new Date())+'.png';
+  var imageName = 'public/images/image_'+Date.parse(new Date())+'.png';
   page.render(imageName);
    try {
     var child = spawn('./create_thumbnail.sh', [
