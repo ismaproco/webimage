@@ -15,7 +15,9 @@
           <div ng-controller="generatorController as ctrl" class="main">
             <div class="search-container">
               <input type="text" ng-model="ctrl.url" class="url-input">
-              <a ng-click="ctrl.process()" class="btn process" tabindex="0" ng-keypress="($event.which === 13)?ctrl.process():0">Process</a>  
+              <div id="captcha"></div>
+              <a ng-click="ctrl.process()" class="btn process" tabindex="0" 
+                 ng-keypress="($event.which === 13)?ctrl.process():0">Process</a>  
             </div>
             <div class="Grid" >
               <div class="Grid-cell" ng-repeat="image in ctrl.images">
@@ -39,8 +41,28 @@
           </div>
         </div>  
       </div>
-      
+      <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer></script>
+     
       <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js"></script>
+      <script type="text/javascript">
+         var RESPONSE;
+        var verifyCallback = function(response) {
+          // I use the response as part of the variables needed to generate the image
+          RESPONSE = response;
+        };
+        
+        var onloadCallback = function() {
+          // Renders the HTML element with id 'example1' as a reCAPTCHA widget.
+          // The id of the reCAPTCHA widget is assigned to 'widgetId1'.
+          grecaptcha.render('captcha', {
+            'sitekey' : '6Lcm5SETAAAAAER0TuUOeJx5RFuHAgtRYZkhbs_G',
+            'callback' : verifyCallback,
+            'theme' : 'light'
+          });
+        };
+      </script>
+    
       <script src="bundle.js"></script>
   </body>
 </html>

@@ -6,16 +6,17 @@ app.controller('generatorController',['$scope', 'imageGenerationService' , 'popu
   ctrl.processStatus = 'none';
   
   ctrl.process = function(){
-    ctrl.processStatus = 'loading';
+    console.log('verify callback', RESPONSE);
     
-    if( ctrl.url.length > 0 ){
-    
+    if( ctrl.url && RESPONSE ){
+      ctrl.processStatus = 'loading';
+      
       if(!( ctrl.url.indexOf('http://') >= 0 || ctrl.url.indexOf('https://') >= 0) ){
          ctrl.url = 'http://' + ctrl.url;
       }
       
       var _url = ctrl.url;
-      igs.getImage( ctrl.url ).then(function(result){
+      igs.getImage( ctrl.url, RESPONSE ).then(function(result){
         ctrl.loadedUrl = result.data;  
         var imgObj = {
           src: 'http://isma.xyz/fc/'+ctrl.loadedUrl.split('_thumbnail')[0],
@@ -43,15 +44,13 @@ app.controller('generatorController',['$scope', 'imageGenerationService' , 'popu
     ps.setImage(image);
     ps.show();
   };
-  
-  console.log('real',ctrl.loadedUrl);
 }]);
 
 
 app.service('imageGenerationService', ['$http',function($http){
   return { 
-    getImage: function(_url) {
-      _url = "http://isma.xyz/fc/process?url="+ _url + '&callback=JSON_CALLBACK';
+    getImage: function(_url, captcha) {
+      _url = "http://isma.xyz/fc/process?url="+ _url + '&captcha=' + captcha + '&callback=JSON_CALLBACK';
       var prom = $http({
         method: 'GET',
         url: _url
