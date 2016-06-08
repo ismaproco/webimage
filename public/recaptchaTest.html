@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta charset="UTF-8">
+      <title>Recaptcha Test</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+  </head>
+
+  <body ng-app="app">
+    <div ng-controller="mainController as ctrl">
+      <ang-recaptcha name="a" 
+                     site-key="6Lcm5SETAAAAAER0TuUOeJx5RFuHAgtRYZkhbs_G"
+                     on-verify="ctrl.onResponse($response)"></ang-recaptcha>  
+    </div>
+    
+    <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js"></script>
+    <script src="angular-recaptcha/index.js"></script>
+    <script src="angular-recaptcha/recaptcha.directive.js"></script>
+    <script src="angular-recaptcha/recaptcha.controller.js"></script>
+    <script src="angular-recaptcha/index.js"></script>
+     
+  </body>
+</html>
