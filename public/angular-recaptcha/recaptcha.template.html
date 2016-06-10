@@ -1,9 +1,3 @@
 <div>
-  <button ng-click="ctrl.reset()">
-    reset {{name}}
-  </button>
-  <button ng-click="ctrl.clean()">
-    clean
-  </button>
-  <div id="{{ name }}" ng-if="ctrl.isVisible"></div>
+  <div id="{{name}}" ng-show="isVisible"></div>
 </div>

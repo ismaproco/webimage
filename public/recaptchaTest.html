@@ -10,17 +10,24 @@
 
   <body ng-app="app">
     <div ng-controller="mainController as ctrl">
-      <ang-recaptcha name="a" 
+      <simple-angular-recaptcha name="captcha" 
                      site-key="6Lcm5SETAAAAAER0TuUOeJx5RFuHAgtRYZkhbs_G"
-                     on-verify="ctrl.onResponse($response)"></ang-recaptcha>  
+                     on-verify="ctrl.onResponse($response)"></simple-angular-recaptcha> 
+      
+      <button ng-click="ctrl.reset()">
+        reset
+      </button>
+      <button ng-click="ctrl.toggle()">
+        toggle
+      </button>
     </div>
     
     <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.2/angular.min.js"></script>
     <script src="angular-recaptcha/index.js"></script>
+    <script src="angular-recaptcha/recaptcha.service.js"></script>
     <script src="angular-recaptcha/recaptcha.directive.js"></script>
-    <script src="angular-recaptcha/recaptcha.controller.js"></script>
-    <script src="angular-recaptcha/index.js"></script>
+    <script src="angular-recaptcha/test.index.js"></script>
      
   </body>
 </html>
